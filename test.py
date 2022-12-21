@@ -21,4 +21,3 @@ codepostal = df['Code postal']
 nomCommune = df['Commune']
 codeDepartement = df['Code departement']
 codeCommune = df['Code commune']
-print (valeurFonciere, '\n')
