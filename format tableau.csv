@@ -10,4 +10,9 @@ code postal | nb transactions total      | prix min | prix max | prix moyen | pr
 
 les retours a la ligne sont la pour la lisibilité, ils seront pas présent dans le tableau final
 
-il y aura 1 tableau par année
+il y aura 1 tableau par année, de 42 cases.
+
+3 cartes: quantité de ventes, prix au metre carré, prix moyen d'une maison
+si on a le temps on peux en sortir de classements par code postal du genre : ville la plus active, ville avec les plus grandes maisons, top des ventes les plus chères...
+
+http://127.0.0.1:8050/
