@@ -3,6 +3,7 @@ import plotly.express as px
 import numpy as np
 import folium
 
+
 app = Dash(__name__)
 
 coords = (46.539758, 2.430331)
@@ -24,7 +25,7 @@ app.layout = html.Div([
                 ],
                 value=2022,
             ),
-    html.H4('Histogramme'),
+    html.H3('Histogramme'),
     dcc.Graph(id="graph"),
     html.P("Moyenne:"),
     dcc.Slider(id="moyenne", min=-3, max=3, value=0, 
@@ -32,7 +33,24 @@ app.layout = html.Div([
     html.P("Écart-type:"),
     dcc.Slider(id="std", min=1, max=3, value=1, 
                marks={1: '1', 3: '3'}),
-    #html.Iframe(map)
+    
+    html.H3('Carte de la France'),
+    html.Iframe(
+        id = "map",
+        srcDoc = open('map.html', 'r').read(),
+        width = "100%",
+        height = "700",
+
+    ),
+
+    html.H3('Carte de la Maison'),
+    html.Iframe(
+        id = "map2",
+        srcDoc = open('map2.html', 'r').read(),
+        width = "100%",
+        height = "700",
+
+    )
 ])
 
 
