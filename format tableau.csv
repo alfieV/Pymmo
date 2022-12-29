@@ -15,4 +15,5 @@ il y aura 1 tableau par année, de 42 cases.
 3 cartes: quantité de ventes, prix au metre carré, prix moyen d'une maison
 si on a le temps on peux en sortir de classements par code postal du genre : ville la plus active, ville avec les plus grandes maisons, top des ventes les plus chères...
 
+le dashboard s'affiche sur l'url:
 http://127.0.0.1:8050/

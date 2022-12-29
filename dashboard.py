@@ -12,7 +12,7 @@ map = folium.Map(location=coords, tiles='OpenStreetMap', zoom_start=6)
 app.layout = html.Div([
     html.H1(children=f'L\'immobilier en France',
                                         style={'textAlign': 'center', 'color': '#000000'}),
-    html.Label('Année'),
+    html.Label('Selectionner l\'année désirée'),
     dcc.Dropdown(
                 #id="year-dropdown",
                 options=[
@@ -27,6 +27,8 @@ app.layout = html.Div([
             ),
     html.H3('Histogramme'),
     dcc.Graph(id="graph"),
+
+    
     html.P("Moyenne:"),
     dcc.Slider(id="moyenne", min=-3, max=3, value=0, 
                marks={-3: '-3', 3: '3'}),
@@ -34,7 +36,20 @@ app.layout = html.Div([
     dcc.Slider(id="std", min=1, max=3, value=1, 
                marks={1: '1', 3: '3'}),
     
-    html.H3('Carte de la France'),
+    html.H3('Histogramme du prix au mètre carré en Seine-Saint-Denis et en Seine-et-Marne'),
+    dcc.Graph(
+        figure={
+            'data': [
+                {'x': [1, 2, 3], 'y': [4, 1, 2], 'type': 'bar', 'name': 'Seine-Saint-Denis'},
+                {'x': [1, 2, 3], 'y': [2, 4, 5], 'type': 'bar', 'name': 'Seine-et-Marne'},
+            ],
+            'layout': {
+                'title': 'Prix au mètre carré'
+            }
+        }
+    ),
+
+    html.H3('Quantité de vente'),
     html.Iframe(
         id = "map",
         srcDoc = open('map.html', 'r').read(),
@@ -43,7 +58,16 @@ app.layout = html.Div([
 
     ),
 
-    html.H3('Carte de la Maison'),
+    html.H3('Prix au mètre carré'),
+    html.Iframe(
+        id = "map",
+        srcDoc = open('map.html', 'r').read(),
+        width = "100%",
+        height = "700",
+
+    ),
+
+    html.H3('Prix moyen d\'une maison'),
     html.Iframe(
         id = "map2",
         srcDoc = open('map2.html', 'r').read(),
