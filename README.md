@@ -19,7 +19,7 @@ Dans un dernier temps il faut lancer le main.py pour créer le dashboard:
 > **python3 main.py**
 
 Le dashboard sera créé sur l'url 
-> **http://127.0.0.1:8050/**  
+> http://127.0.0.1:8050/  
 
 ## Rapport d’analyse
 
