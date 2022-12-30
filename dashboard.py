@@ -87,5 +87,5 @@ def display_color(moyenne, std):
     fig = px.histogram(data, range_x=[-10, 10])
     return fig
 
-app.run_server(debug=True)
+app.run_server(debug=True) #le dashboard s'affiche sur l'url: http://127.0.0.1:8050/
 
