@@ -1,0 +1,7 @@
+pandas
+dash
+plotly.express
+numpy
+folium
+branca
+requests
