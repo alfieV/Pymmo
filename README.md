@@ -25,4 +25,11 @@ Le dashboard sera créé sur l'url
 
 ## Rapport d’analyse
 
+### Les cartes  
+Les cartes varient du noir (taux faible) au rouge (taux élevé) en fonction des données contenu dans le dataset.  
+On remarque que les 2 cartes se ressemblent fortement ainsi le prix moyen pour tout type de bien et le prix au m² pour les maisons sont en corrélation.  
+Par exemple l'Alsace et la Bourgogne (zone noire) sont peu chères comparées à l'Ile-de-France (zone rouge).  
+Cependant on constate quelques différences:  
+Dans la région Rhône-Alpes le prix moyen pour tout type de bien est plus élevé (zone rouge) donc supérieur à la moyenne tandis que pour la carte du prix au m² pour les maisons la région Rhône-Alpes est une zone noire, est donc inférieur à la moyenne.   
+
 ## Developper Guide
