@@ -55,7 +55,8 @@ calcdata((calcdata))
 calcdatachunk((calcdatachunk))
 
 main --> sortdata
+main --> calcdata
 sortdata --> calcdata
 calcdata --> calcdatachunk
-calcdatachunk --> findcode
+main --> findcode
 ```
