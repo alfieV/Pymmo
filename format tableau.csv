@@ -1,12 +1,9 @@
 voici le format qu'aura le tableau après le traitement des données :
 
-code postal | nb transactions total      | prix min | prix max | prix moyen | prix au m² max | prix au m² min, prix au m² moyen
-            | nb transactions maisons    | prix min | prix max | prix moyen | prix au m² max | prix au m² min, prix au m² moyen
-            | nb transactions apparts    | prix min | prix max | prix moyen | prix au m² max | prix au m² min, prix au m² moyen
-            | nb transactions commercial | prix min | prix max | prix moyen | prix au m² max | prix au m² min, prix au m² moyen
-            | nb transactions autres     | prix min | prix max | prix moyen | prix au m² max | prix au m² min, prix au m² moyen
-            | nb de pièces      min | max | moyen
-            | taille de terrain min | max | moyen
+code postal | nb transactions total      | prix min | prix max | prix moyen | surface min | surface max | surface moyenne | prix au m² max | prix au m² min, prix au m² moyen
+            | nb transactions maisons    | prix min | prix max | prix moyen | surface min | surface max | surface moyenne | prix au m² max | prix au m² min, prix au m² moyen
+            | nb transactions apparts    | prix min | prix max | prix moyen | surface min | surface max | surface moyenne | prix au m² max | prix au m² min, prix au m² moyen
+            | nb transactions commercial | prix min | prix max | prix moyen | surface min | surface max | surface moyenne | prix au m² max | prix au m² min, prix au m² moyen
 
 les retours a la ligne sont la pour la lisibilité, ils seront pas présent dans le tableau final
 
