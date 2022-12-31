@@ -24,6 +24,8 @@ Le dashboard sera créé sur l'url
 > http://127.0.0.1:8050/  
 
 ## Rapport d’analyse
+### L'histogramme
+
 
 ### Les cartes  
 Les cartes varient du noir (taux faible) au rouge (taux élevé) en fonction des données contenu dans le dataset.  
