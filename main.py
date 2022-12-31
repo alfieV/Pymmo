@@ -206,7 +206,7 @@ def main():
 
     map_prixm2mai.save("prixmoym2mai.html")
 
-    fig = px.histogram(realdata2022, x = "surfmoymai", color = "surfmoymai", barmode="group", text_auto=True)  # histogramme de la surface moyenne par commune
+    fig = px.histogram(realdata2022, x = "surfmoymai", color = "surfmoymai", barmode="group", text_auto=True, labels="surface moyenne")  # histogramme de la surface moyenne par commune
 
     app.layout = html.Div([
         html.H1(children=f'L\'immobilier en France', style={'textAlign': 'center', 'color': '#000000'}),  ## titre de la page
