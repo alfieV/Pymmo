@@ -44,3 +44,18 @@ Les fonctions utilisées:
 * ***calcdatachunk*** : fait les calculs pour 1 type de bien
 * ***findcode*** : permet de formatter le code commune qui est séparé dans les fichiers d'entrée
 * ***main*** : téléchargement des données et création du dashboard
+
+```mermaid
+graph TD;
+
+main((main))
+sortdata((sortdata))
+findcode((findcode))
+calcdata((calcdata))
+calcdatachunk((calcdatachunk))
+
+main --> sortdata
+sortdata --> calcdata
+calcdata --> calcdatachunk
+calcdatachunk --> findcode
+```
