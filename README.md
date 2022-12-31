@@ -31,6 +31,6 @@ On remarque que les 2 cartes se ressemblent fortement ainsi le prix moyen pour t
 Par exemple l'Alsace et la Bourgogne (zone noire) sont peu chères comparées à l'Ile-de-France (zone rouge).  
 Cependant on constate quelques différences:  
 Dans la région Rhône-Alpes le prix moyen pour tout type de bien est plus élevé (zone rouge) donc supérieur à la moyenne tandis que pour la carte du prix au m² pour les maisons la région Rhône-Alpes est une zone noire, est donc inférieur à la moyenne.   
-Cela explique que ce sont les autres types de bien que les maisons (les appartements...) qui sont supérieur en prix au m².
+Cela explique que ce sont les autres types de bien que les maisons (les appartements...) qui sont supérieur en prix au m² dans la région Rhône-Alpes.
 
 ## Developper Guide
