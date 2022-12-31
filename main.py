@@ -174,7 +174,7 @@ def main():
         key_on="properties.code",
         fill_color="YlOrRd",
         fill_opacity=0.6,
-        line_opacity=1,
+        line_opacity=0.4,
         bins=bins,
         overlay=True,
         legend_name="prix moyen pour tout type de bien"
@@ -196,7 +196,7 @@ def main():
         key_on="properties.code",
         fill_color="YlOrRd",
         fill_opacity=0.6,
-        line_opacity=1,
+        line_opacity=0.4,
         bins=bins,
         overlay=True,
         legend_name="prix moyen au m² pour les maisons"
