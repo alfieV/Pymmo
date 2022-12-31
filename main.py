@@ -28,9 +28,7 @@ def calcdata(sorteddata):
         city = calcdatachunk(city,lignes, 1)
         city = calcdatachunk(city,lignes, 2)
         city = calcdatachunk(city,lignes, 4)
-
         realdata[cp] = city
-    
     return realdata
 
 
@@ -48,8 +46,10 @@ def calcdatachunk(city, lignes, typebien):
     prixm2 = []
     rooms = []
 
-    if (type==0):
+    if (typebien==0):
         for ligne in lignes:
+            city['nomcommune'] = ligne[17]
+
             if (type(ligne[10]) != float):
                 valeurfonciere.append(float(ligne[10].replace(',', '.'))) # 11= valeur foncière
             else:
@@ -65,7 +65,7 @@ def calcdatachunk(city, lignes, typebien):
             rooms.append(ligne[39]) # 4° = nombre de pièces principales
     else:
         for ligne in lignes:
-            if ligne[35] == 1: # code type local = maison
+            if ligne[35] == typebien: # code type local 
                 if (type(ligne[10]) != float):
                     valeurfonciere.append(float(ligne[10].replace(',', '.'))) # 11= valeur foncière
                 else:
@@ -80,40 +80,39 @@ def calcdatachunk(city, lignes, typebien):
                 rooms.append(ligne[39]) # 4° = nombre de pièces principales
             
 
-        if len(valeurfonciere) >0:
-            city['nbtrans'+strend] = len(valeurfonciere)
-            city['prixmin'+strend] = np.min(valeurfonciere)
-            city['prixmax'+strend] = np.max(valeurfonciere)
-            city['prixmoy'+strend] = np.mean(valeurfonciere)
-            city['surfmin'+strend] = np.min(surface)
-            city['surfmax'+strend] = np.max(surface)
-            city['surfmoy'+strend] = np.mean(surface)
-            if len(prixm2) >0:
-                city['mdeumin'+strend] = np.min(prixm2)
-                city['mdeumax'+strend] = np.max(prixm2)
-                city['mdeumoy'+strend] = np.mean(prixm2)
-            else: 
-                city['mdeumin'+strend] = None
-                city['mdeumax'+strend] = None
-                city['mdeumoy'+strend] = None
-            city['piecmin'+strend] = np.min(rooms)
-            city['piecmax'+strend] = np.max(rooms)
-            city['piecmoy'+strend] = np.mean(rooms)
-        else:
-            city['nbtrans'+strend] = None
-            city['prixmin'+strend] = None
-            city['prixmax'+strend] = None
-            city['prixmoy'+strend] = None
-            city['surfmin'+strend] = None
-            city['surfmax'+strend] = None
-            city['surfmoy'+strend] = None
+    if len(valeurfonciere) >0:
+        city['nbtrans'+strend] = len(valeurfonciere)
+        city['prixmin'+strend] = np.min(valeurfonciere)
+        city['prixmax'+strend] = np.max(valeurfonciere)
+        city['prixmoy'+strend] = np.mean(valeurfonciere)
+        city['surfmin'+strend] = np.min(surface)
+        city['surfmax'+strend] = np.max(surface)
+        city['surfmoy'+strend] = np.mean(surface)
+        if len(prixm2) >0:
+            city['mdeumin'+strend] = np.min(prixm2)
+            city['mdeumax'+strend] = np.max(prixm2)
+            city['mdeumoy'+strend] = np.mean(prixm2)
+        else: 
             city['mdeumin'+strend] = None
             city['mdeumax'+strend] = None
             city['mdeumoy'+strend] = None
-            city['piecmin'+strend] = None
-            city['piecmax'+strend] = None
-            city['piecmoy'+strend] = None
-
+        city['piecmin'+strend] = np.min(rooms)
+        city['piecmax'+strend] = np.max(rooms)
+        city['piecmoy'+strend] = np.mean(rooms)
+    else:
+        city['nbtrans'+strend] = None
+        city['prixmin'+strend] = None
+        city['prixmax'+strend] = None
+        city['prixmoy'+strend] = None
+        city['surfmin'+strend] = None
+        city['surfmax'+strend] = None
+        city['surfmoy'+strend] = None
+        city['mdeumin'+strend] = None
+        city['mdeumax'+strend] = None
+        city['mdeumoy'+strend] = None
+        city['piecmin'+strend] = None
+        city['piecmax'+strend] = None
+        city['piecmoy'+strend] = None
     return city
 
 def findcode(elem):
@@ -163,23 +162,49 @@ def main():
     app = Dash(__name__)
 
     coords = (46.539758, 2.430331)
-    map_prixm2 = folium.Map(location=coords, tiles='OpenStreetMap', zoom_start=6)
+    map_prixmoy = folium.Map(location=coords, tiles='OpenStreetMap', zoom_start=6)
+
+    bins = list(realdata2022["prixmoytot"].quantile([0, 0.25, 0.5, 0.75, 0.95, 1]))
 
     folium.Choropleth(
         geo_data="geojson/communes.geojson",
         name="prix_au_m2",
         data=realdata2022,
-        columns=["codecomune", "mdeumoytot"],
-        key_on="feature.properties.code",
+        columns=['codecomune', "prixmoytot"],
+        key_on="properties.code",
         fill_color="YlOrRd",
-        fill_opacity=0.4,
+        fill_opacity=0.6,
         line_opacity=1,
-        legend_name="prix moyen au m² pour tout type de bien",
-    ).add_to(map_prixm2)
+        bins=bins,
+        overlay=True,
+        legend_name="prix moyen pour tout type de bien"
+    ).add_to(map_prixmoy)
     
-    folium.LayerControl().add_to(map_prixm2)
+    folium.LayerControl().add_to(map_prixmoy)
 
-    map_prixm2.save("prixmoym2tot.html")
+    map_prixmoy.save("prixmoytot.html")
+
+    map_prixm2mai = folium.Map(location=coords, tiles='OpenStreetMap', zoom_start=6)
+
+    bins = list(realdata2022["mdeumoymai"].quantile([0, 0.25, 0.5, 0.75, 0.95, 1]))
+
+    folium.Choropleth(
+        geo_data="geojson/communes.geojson",
+        name="prix_au_m2",
+        data=realdata2022,
+        columns=['codecomune', "mdeumoymai"],
+        key_on="properties.code",
+        fill_color="YlOrRd",
+        fill_opacity=0.6,
+        line_opacity=1,
+        bins=bins,
+        overlay=True,
+        legend_name="prix moyen au m² pour les maisons"
+    ).add_to(map_prixm2mai)
+    
+    folium.LayerControl().add_to(map_prixm2mai)
+
+    map_prixm2mai.save("prixmoym2mai.html")
 
 
     app.layout = html.Div([
@@ -221,10 +246,18 @@ def main():
             }
         ),
 
-        html.H3('Quantité de vente'),
+        html.H3('prix moyen tout type de bien'),
         html.Iframe(
             id = "map",
-            srcDoc = open('prixmoym2tot.html', 'r').read(),
+            srcDoc = open('prixmoytot.html', 'r').read(),
+            width = "100%",
+            height = "700",
+        ),
+
+        html.H3('prix au m² pour les maisons'),
+        html.Iframe(
+            id = "map2",
+            srcDoc = open('prixmoym2mai.html', 'r').read(),
             width = "100%",
             height = "700",
         )
