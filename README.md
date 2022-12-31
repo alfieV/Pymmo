@@ -36,3 +36,11 @@ Dans la région Rhône-Alpes le prix moyen pour tout type de bien est plus élev
 Cela explique que ce sont les autres types de bien que les maisons (les appartements...) qui sont supérieur en prix au m² dans la région Rhône-Alpes.
 
 ## Developper Guide
+Le code a été développé de manière structuré avec des fonctions avec un "*main*" les appelants.  
+Ce mode de fonctionnement permet au code une amélioration facile et pratique à l'avenir.  
+Les fonctions utilisées:
+* sortdata : permet de trier les transactions par code commune
+* calcdata : permet de faire les calculs pour tous, les biens, seulement les maisons, seulement les apparts et seulement les locaux commerciaux
+* calcdatachunk : fait les calculs pour 1 type de bien
+* findcode : permet de formatter le code commune qui est séparé dans les fichiers d'entrée
+* main : téléchargement des données et création du dashboard
