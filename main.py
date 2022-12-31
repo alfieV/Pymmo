@@ -22,6 +22,7 @@ def calcdata(sorteddata):
     for cp in sorteddata:
         city = dict()
         lignes = sorteddata[cp]
+        city['codecomune'] = cp
 
         city = calcdatachunk(city,lignes, 0)
         city = calcdatachunk(city,lignes, 1)
@@ -90,9 +91,11 @@ def calcdatachunk(city, lignes, typebien):
             if len(prixm2) >0:
                 city['mdeumin'+strend] = np.min(prixm2)
                 city['mdeumax'+strend] = np.max(prixm2)
+                city['mdeumoy'+strend] = np.mean(prixm2)
             else: 
                 city['mdeumin'+strend] = None
                 city['mdeumax'+strend] = None
+                city['mdeumoy'+strend] = None
             city['piecmin'+strend] = np.min(rooms)
             city['piecmax'+strend] = np.max(rooms)
             city['piecmoy'+strend] = np.mean(rooms)
@@ -125,7 +128,6 @@ def findcode(elem):
     if (communelen==2):
         outputstr = outputstr + '0'
     outputstr = outputstr + str(elem[19])
-    #print (outputstr)
     return outputstr
 
 def main():
@@ -158,19 +160,30 @@ def main():
     #realdata2018 = calcdata(sorteddata2018)
     #realdata2017 = calcdata(sorteddata2017)
 
-    #print(realdata2022)
-
     app = Dash(__name__)
 
     coords = (46.539758, 2.430331)
-    #map = folium.Map(location=coords, tiles='OpenStreetMap', zoom_start=6)
-    map = px.choropleth_mapbox(sorteddata2022, geojson = "geojson/communes.geojson", locations = "cp", color = "mdeumoytot", featureidkey = "properties.code",
-                               mapbox_style = "carto-positron", zoom = 4, center = {'lat': 47,'lon': 2})
+    map_prixm2 = folium.Map(location=coords, tiles='OpenStreetMap', zoom_start=6)
+
+    folium.Choropleth(
+        geo_data="geojson/communes.geojson",
+        name="prix_au_m2",
+        data=realdata2022,
+        columns=["codecomune", "mdeumoytot"],
+        key_on="feature.properties.code",
+        fill_color="YlOrRd",
+        fill_opacity=0.4,
+        line_opacity=1,
+        legend_name="prix moyen au m² pour tout type de bien",
+    ).add_to(map_prixm2)
+    
+    folium.LayerControl().add_to(map_prixm2)
+
+    map_prixm2.save("prixmoym2tot.html")
 
 
     app.layout = html.Div([
-        html.H1(children=f'L\'immobilier en France',
-                                            style={'textAlign': 'center', 'color': '#000000'}),
+        html.H1(children=f'L\'immobilier en France', style={'textAlign': 'center', 'color': '#000000'}),
         html.Label('Selectionner l\'année désirée'),
         dcc.Dropdown(
                     #id="year-dropdown",
@@ -211,28 +224,9 @@ def main():
         html.H3('Quantité de vente'),
         html.Iframe(
             id = "map",
-            srcDoc = open('map.html', 'r').read(),
+            srcDoc = open('prixmoym2tot.html', 'r').read(),
             width = "100%",
             height = "700",
-
-        ),
-
-        html.H3('Prix au mètre carré'),
-        html.Iframe(
-            id = "map",
-            srcDoc = open('map.html', 'r').read(),
-            width = "100%",
-            height = "700",
-
-        ),
-
-        html.H3('Prix moyen d\'une maison'),
-        html.Iframe(
-            id = "map2",
-            srcDoc = open('map2.html', 'r').read(),
-            width = "100%",
-            height = "700",
-
         )
     ])
 
