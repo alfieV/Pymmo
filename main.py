@@ -4,7 +4,7 @@ import numpy as np
 import folium
 import pandas as pd
 
-def sortdata(data):
+def sortdata(data): # cette fonction permet de trier les transactions par code commune
     sorteddata = dict()
 
     for elem in data.itertuples(index=False):
@@ -17,7 +17,7 @@ def sortdata(data):
     
     return sorteddata
 
-def calcdata(sorteddata):
+def calcdata(sorteddata): # cette fonction permet de faire les calculs pour tous, les biens, seulement les maisons, seulement les apparts et seulement les locaux commerciaux
     realdata = dict()
     for cp in sorteddata:
         city = dict()
@@ -32,7 +32,7 @@ def calcdata(sorteddata):
     return realdata
 
 
-def calcdatachunk(city, lignes, typebien):
+def calcdatachunk(city, lignes, typebien): # fait les calculs pour 1 type de bien
     if (typebien==0):
         strend='tot'
     if (typebien==1):
@@ -80,7 +80,7 @@ def calcdatachunk(city, lignes, typebien):
                 rooms.append(ligne[39]) # 4° = nombre de pièces principales
             
 
-    if len(valeurfonciere) >0:
+    if len(valeurfonciere) >0:          # une fois toutes les données récupérées, on calcule les minimums, maximums et moyennes des données
         city['nbtrans'+strend] = len(valeurfonciere)
         city['prixmin'+strend] = np.min(valeurfonciere)
         city['prixmax'+strend] = np.max(valeurfonciere)
@@ -99,7 +99,7 @@ def calcdatachunk(city, lignes, typebien):
         city['piecmin'+strend] = np.min(rooms)
         city['piecmax'+strend] = np.max(rooms)
         city['piecmoy'+strend] = np.mean(rooms)
-    else:
+    else:                                       #si pas de données associées a ce code commune, on l'indique
         city['nbtrans'+strend] = None
         city['prixmin'+strend] = None
         city['prixmax'+strend] = None
@@ -115,7 +115,7 @@ def calcdatachunk(city, lignes, typebien):
         city['piecmoy'+strend] = None
     return city
 
-def findcode(elem):
+def findcode(elem):                 #permet de formatter le code commune qui est séparé dans les fichiers d'entrée
     regionlen=len(str(elem[18]))
     communelen=len(str(elem[19]))
     outputstr = ''
@@ -130,18 +130,18 @@ def findcode(elem):
     return outputstr
 
 def main():
-    print("téléchargement des données en cours (environ 2Go)")
-    url2022 = "DATA/valeursfoncieres-2022-s1.txt" #"https://www.data.gouv.fr/fr/datasets/r/87038926-fb31-4959-b2ae-7a24321c599a"
-    url2021 = "https://www.data.gouv.fr/fr/datasets/r/817204ac-2202-4b4a-98e7-4184d154d98c"
-    url2020 = "https://www.data.gouv.fr/fr/datasets/r/90a98de0-f562-4328-aa16-fe0dd1dca60f"
-    url2019 = "https://www.data.gouv.fr/fr/datasets/r/3004168d-bec4-44d9-a781-ef16f41856a2"
-    url2018 = "https://www.data.gouv.fr/fr/datasets/r/1be77ca5-dc1b-4e50-af2b-0240147e0346"
-    url2017 = "https://www.data.gouv.fr/fr/datasets/r/7161c9f2-3d91-4caf-afa2-cfe535807f04"
+    print("téléchargement des données en cours")
+    url2022 = "https://www.data.gouv.fr/fr/datasets/r/87038926-fb31-4959-b2ae-7a24321c599a"
+    #url2021 = "https://www.data.gouv.fr/fr/datasets/r/817204ac-2202-4b4a-98e7-4184d154d98c"
+    #url2020 = "https://www.data.gouv.fr/fr/datasets/r/90a98de0-f562-4328-aa16-fe0dd1dca60f"
+    #url2019 = "https://www.data.gouv.fr/fr/datasets/r/3004168d-bec4-44d9-a781-ef16f41856a2"
+    #url2018 = "https://www.data.gouv.fr/fr/datasets/r/1be77ca5-dc1b-4e50-af2b-0240147e0346"
+    #url2017 = "https://www.data.gouv.fr/fr/datasets/r/7161c9f2-3d91-4caf-afa2-cfe535807f04"
 
     data2022 = pd.read_csv(url2022, delimiter="|", low_memory=False)
     #data2021 = pd.read_csv(url2021, delimiter="|", low_memory=False)
     #data2020 = pd.read_csv(url2020, delimiter="|", low_memory=False)
-    #data2019 = pd.read_csv(url2019, delimiter="|", low_memory=False)
+    #data2019 = pd.read_csv(url2019, delimiter="|", low_memory=False)  # enlevés du dataset à cause de dépassement de limite de mémoires
     #data2018 = pd.read_csv(url2018, delimiter="|", low_memory=False)
     #data2017 = pd.read_csv(url2017, delimiter="|", low_memory=False)
 
@@ -153,21 +153,21 @@ def main():
     #sorteddata2017 = sortdata(data2017)
         
     realdata2022 = pd.DataFrame.from_dict(calcdata(sorteddata2022), orient='index')
-    #realdata2021 = calcdata(sorteddata2021)
-    #realdata2020 = calcdata(sorteddata2020)
-    #realdata2019 = calcdata(sorteddata2019)
-    #realdata2018 = calcdata(sorteddata2018)
-    #realdata2017 = calcdata(sorteddata2017)
+    #realdata2021 = pd.DataFrame.from_dict(calcdata(sorteddata2021), orient='index')
+    #realdata2020 = pd.DataFrame.from_dict(calcdata(sorteddata2020), orient='index')
+    #realdata2019 = pd.DataFrame.from_dict(calcdata(sorteddata2019), orient='index')
+    #realdata2018 = pd.DataFrame.from_dict(calcdata(sorteddata2018), orient='index')
+    #realdata2017 = pd.DataFrame.from_dict(calcdata(sorteddata2017), orient='index')
 
-    app = Dash(__name__)
+    app = Dash(__name__)            # on crée le dash
 
     coords = (46.539758, 2.430331)
-    map_prixmoy = folium.Map(location=coords, tiles='OpenStreetMap', zoom_start=6)
+    map_prixmoy = folium.Map(location=coords, tiles='OpenStreetMap', zoom_start=6)      # création de la première carte
 
-    bins = list(realdata2022["prixmoytot"].quantile([0, 0.25, 0.5, 0.75, 0.95, 1]))
+    bins = list(realdata2022["prixmoytot"].quantile([0, 0.25, 0.5, 0.75, 0.95, 1]))     #permet d'afficher les bonnes couleurs malgré les données de mauvaises qualités en entrée
 
-    folium.Choropleth(
-        geo_data="geojson/communes.geojson",
+    folium.Choropleth(                                                                  # permet la superposition des communes avec les couleurs correspondant aux données sélectionnées
+        geo_data="https://raw.githubusercontent.com/gregoiredavid/france-geojson/master/communes.geojson",
         name="prix_au_m2",
         data=realdata2022,
         columns=['codecomune', "prixmoytot"],
@@ -180,11 +180,11 @@ def main():
         legend_name="prix moyen pour tout type de bien"
     ).add_to(map_prixmoy)
     
-    folium.LayerControl().add_to(map_prixmoy)
+    folium.LayerControl().add_to(map_prixmoy)                                   # permet d'affichier ou non les couches rajoutées à la carte
 
-    map_prixmoy.save("prixmoytot.html")
+    map_prixmoy.save("prixmoytot.html") # on enregistre la carte pour l'utiliser dans le dashboard
 
-    map_prixm2mai = folium.Map(location=coords, tiles='OpenStreetMap', zoom_start=6)
+    map_prixm2mai = folium.Map(location=coords, tiles='OpenStreetMap', zoom_start=6)  # deuxième carte
 
     bins = list(realdata2022["mdeumoymai"].quantile([0, 0.25, 0.5, 0.75, 0.95, 1]))
 
@@ -206,48 +206,19 @@ def main():
 
     map_prixm2mai.save("prixmoym2mai.html")
 
+    fig = px.histogram(realdata2022, x = "surfmoymai", color = "surfmoymai", barmode="group", text_auto=True)  # histogramme de la surface moyenne par commune
 
     app.layout = html.Div([
-        html.H1(children=f'L\'immobilier en France', style={'textAlign': 'center', 'color': '#000000'}),
-        html.Label('Selectionner l\'année désirée'),
-        dcc.Dropdown(
-                    #id="year-dropdown",
-                    options=[
-                        {'label': '2022', 'value': 2022},
-                        {'label': '2021', 'value': 2021},
-                        {'label': '2020', 'value': 2020},
-                        {'label': '2019', 'value': 2019},
-                        {'label': '2018', 'value': 2018},
-                        {'label': '2017', 'value': 2017},
-                    ],
-                    value=2022,
-                ),
-        html.H3('Histogramme'),
-        dcc.Graph(id="graph"),
-
+        html.H1(children=f'L\'immobilier en France', style={'textAlign': 'center', 'color': '#000000'}),  ## titre de la page
         
-        html.P("Moyenne:"),
-        dcc.Slider(id="moyenne", min=-3, max=3, value=0, 
-                marks={-3: '-3', 3: '3'}),
-        html.P("Écart-type:"),
-        dcc.Slider(id="std", min=1, max=3, value=1, 
-                marks={1: '1', 3: '3'}),
-        
-        html.H3('Histogramme du prix au mètre carré en Seine-Saint-Denis et en Seine-et-Marne'),
-        dcc.Graph(
-            figure={
-                'data': [
-                    {'x': [1, 2, 3], 'y': [4, 1, 2], 'type': 'bar', 'name': 'Seine-Saint-Denis'},
-                    {'x': [1, 2, 3], 'y': [2, 4, 5], 'type': 'bar', 'name': 'Seine-et-Marne'},
-                ],
-                'layout': {
-                    'title': 'Prix au mètre carré'
-                }
-            }
+        html.H3('Surface moyenne des maisons par commune'),
+        dcc.Graph(              #affichage de l'histogramme
+            id = 'surface moyenne maisons',
+            figure = fig
         ),
 
         html.H3('prix moyen tout type de bien'),
-        html.Iframe(
+        html.Iframe(  #affichage carte 1
             id = "map",
             srcDoc = open('prixmoytot.html', 'r').read(),
             width = "100%",
@@ -255,7 +226,7 @@ def main():
         ),
 
         html.H3('prix au m² pour les maisons'),
-        html.Iframe(
+        html.Iframe(        #affichage carte 2
             id = "map2",
             srcDoc = open('prixmoym2mai.html', 'r').read(),
             width = "100%",
@@ -263,17 +234,7 @@ def main():
         )
     ])
 
-
-    @app.callback(
-        Output("graph", "figure"), 
-        Input("moyenne", "value"), 
-        Input("std", "value"))
-    def display_color(moyenne, std):
-        data = np.random.normal(moyenne, std, size=500) # replace with your own data source
-        fig = px.histogram(data, range_x=[-10, 10])
-        return fig
-
     app.run_server(debug=True) #le dashboard s'affiche sur l'url: http://127.0.0.1:8050/
 
 if __name__ == "__main__":
-    main()
+    main() #permet de lancer le programme
